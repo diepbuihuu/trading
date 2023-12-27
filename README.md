@@ -1,20 +1,22 @@
 
-## Zshop 
+<p align="center">
 
-Zshop is e-commerse based web application build with **laravel** by [Tauseed Zaman](https://github.com/tauseedzaman).
-### How to Install Zshop 
+  <img src="./readme.png">
+</p>
 
-- **Clone/Download the repo**
-- **composer install**
-- **copy .env.example .env**
-- **php artisan key:generate**
-- **php artisan migrate**
-- **php artisan db:seed**
-- **php artisan serve**
-- **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
+Features:
+1. Manual test: Allow testing strategy on x10 speed, also allow skipping time - you can see your strategy performance after a few minutes instead of hours.
+2. Automatic test: Specify the rule and let the system run the test. It will show you all the cases which match your condition.
+3. AI mode which deicide the best action at any moment (In development).
 
+Installation
 
-## License
+```javascript
 
-The Zshop is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+composer install
 
+php artisan migrate
+
+npm run dev
+
+```
