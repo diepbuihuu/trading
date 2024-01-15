@@ -13,6 +13,7 @@ Route::get('/graph/data/{start}',[\App\Http\Controllers\GraphController::class, 
 Route::get('/graph/future_data/{start}',[\App\Http\Controllers\GraphController::class, 'getFutureDataForDate']);
 Route::get('/graph/data',[\App\Http\Controllers\GraphController::class, 'getData']);
 Route::get('/graph/manual/{start}',[\App\Http\Controllers\GraphController::class, 'manual']);
+Route::get('/graph/manual',[\App\Http\Controllers\GraphController::class, 'chooseDate']);
 
 Route::get('/strategy/{id}/graph/{start}/data',[\App\Http\Controllers\StrategyController::class, 'getData']);
 Route::get('/strategy/{id}/graph/{start}',[\App\Http\Controllers\StrategyController::class, 'drawGraph']);

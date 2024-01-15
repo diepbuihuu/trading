@@ -20,7 +20,8 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
-    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script src="/js/app.js"></script>
     @livewireStyles
     @livewireScripts
 </head>
@@ -209,14 +210,9 @@
         </div>
     </footer>
 
-    <!-- <script src="{{ asset('plugins/jquery/dist/jquery.min.js') }}"></script> -->
+    <!--<script src="{{ asset('plugins/jquery/dist/jquery.min.js') }}"></script> -->
     <!-- <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script> -->
-    <script src="{{ asset('plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js') }}"></script>
-    <script src="{{ asset('plugins/instafeed/instafeed.min.js') }}"></script>
-    <script src="{{ asset('plugins/ekko-lightbox/dist/ekko-lightbox.min.js') }}"></script>
-    <script src="{{ asset('plugins/syo-timer/build/jquery.syotimer.min.js') }}"></script>
-    <script src="{{ asset('plugins/slick/slick.min.js') }}"></script>
-    <script src="{{ asset('plugins/slick/slick-animation.min.js') }}"></script>
+
     <script src="{{ asset('js/script.js') }}"></script>
 
 </body>

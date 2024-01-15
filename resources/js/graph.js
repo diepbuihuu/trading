@@ -1,5 +1,3 @@
-require('./bootstrap');
-
 
 import {getGraphData, setGraphData, get60, getNext, generateRealTimeData} from './graph_data';
 import {drawGraph, updateGraph, appendGraph, appendIndicator, changeGraphMode} from './graph_service';

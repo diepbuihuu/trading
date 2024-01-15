@@ -30,6 +30,12 @@ class GraphController extends Controller
         return $this->getDataForDate($startTime);
     }
 
+    public function chooseDate() {
+        return view('graph.choose_date', [
+            'start' => '08/21/2023'
+        ]);
+    }
+
     public function getDataForDate($startTime) {
 
         $startTime = Price15::where('time', '<=', $startTime)->orderBy('time', 'desc')->first()->time;

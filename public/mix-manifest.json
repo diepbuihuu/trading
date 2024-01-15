@@ -1,4 +1,6 @@
 {
+    "/js/app.js": "/js/app.js",
     "/js/graph.js": "/js/graph.js",
-    "/js/dynamic_graph.js": "/js/dynamic_graph.js"
+    "/js/dynamic_graph.js": "/js/dynamic_graph.js",
+    "/css/app.css": "/css/app.css"
 }

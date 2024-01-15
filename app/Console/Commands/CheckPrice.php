@@ -6,21 +6,21 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Price;
 
-class ImportPrice extends Command
+class CheckPrice extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'import_price {filename}';
+    protected $signature = 'check_price {filename}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate Price data from file';
+    protected $description = 'Check Price on file';
 
     /**
      * Create a new command instance.
@@ -44,19 +44,11 @@ class ImportPrice extends Command
         $data = json_decode(trim($content), true);
         $size = count($data['t']);
 
-        echo date("Y-m-d H:i:s", $data['t'][0]) . PHP_EOL;
-
-        for ($i = 0; $i < $size; $i++) {
-            $price = Price::firstOrCreate(
-                ['time' => $data['t'][$i]],
-                [
-                    'high' => round($data['h'][$i], 2),
-                    'low' => round($data['l'][$i], 2),
-                    'open' => round($data['o'][$i], 2),
-                    'close' => round($data['c'][$i], 2),
-                ]
-            );
-            $price->save();
+        for ($i = 0; $i < $size - 1; $i++) {
+            $timeDiff = $data['t'][$i + 1] - $data['t'][$i];
+            if ($timeDiff != 60) {
+                echo date('Y-m-d H:i:s', $data['t'][$i]) . ' ' . $timeDiff . PHP_EOL;
+            }
         }
 
     }
