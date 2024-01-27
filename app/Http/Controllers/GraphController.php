@@ -9,6 +9,8 @@ use App\Models\Price5;
 use App\Models\Bb5;
 use App\Models\Price15;
 use App\Models\Bb15;
+use App\Models\Price60;
+use App\Models\Bb60;
 
 class GraphController extends Controller
 {
@@ -38,84 +40,18 @@ class GraphController extends Controller
 
     public function getDataForDate($startTime) {
 
-        $startTime = Price15::where('time', '<=', $startTime)->orderBy('time', 'desc')->first()->time;
+        $startTime = Price60::where('time', '<=', $startTime)->orderBy('time', 'desc')->first()->time;
+        $limit = 150;
 
-        $prices = Price::where('time', '<', $startTime)->orderBy('time', 'desc')->take(150)->get()->toArray();
-        $candles = array_map(function($p) {
-            return [$p['time'], $p['open'], $p['high'], $p['low'], $p['close']];
-        }, $prices);
+        $candles = Price::getPastData($startTime, $limit);
+        $candle5s = Price5::getPastData($startTime, $limit);
+        $candle15s = Price15::getPastData($startTime, $limit);
+        $candle60s = Price60::getPastData($startTime, $limit);
 
-        $bbs = Bb::where('time', '<', $startTime)->orderBy('time', 'desc')->take(150)->get()->toArray();
-        $bbData = array_map(function($p) {
-            return [$p['time'], $p['sma'], $p['sd'], $p['upper'], $p['lower']];
-        }, $bbs);
-
-        $price5s = Price5::where('time', '<', $startTime)->orderBy('time', 'desc')->take(150)->get()->toArray();
-        $candle5s = array_map(function($p) {
-            return [$p['time'], $p['open'], $p['high'], $p['low'], $p['close']];
-        }, $price5s);
-
-        $bb5s  = Bb5::where('time', '<', $startTime)->orderBy('time', 'desc')->take(150)->get()->toArray();
-
-        $bb5Data = array_map(function($p) {
-            return [$p['time'], $p['sma'], $p['sd'], $p['upper'], $p['lower']];
-        }, $bb5s);
-
-        $price15s = Price15::where('time', '<', $startTime)->orderBy('time', 'desc')->take(150)->get()->toArray();
-        $candle15s = array_map(function($p) {
-            return [$p['time'], $p['open'], $p['high'], $p['low'], $p['close']];
-        }, $price15s);
-
-        $bb15s  = Bb15::where('time', '<', $startTime)->orderBy('time', 'desc')->take(150)->get()->toArray();
-
-        $bb15Data = array_map(function($p) {
-            return [$p['time'], $p['sma'], $p['sd'], $p['upper'], $p['lower']];
-        }, $bb15s);
-
-        return [
-            'candles' => array_reverse($candles),
-            'bb_data' => array_reverse($bbData),
-            'm5_candles' => array_reverse($candle5s),
-            'm5_bb_data' => array_reverse($bb5Data),
-            'm15_candles' => array_reverse($candle15s),
-            'm15_bb_data' => array_reverse($bb15Data),
-        ];
-    }
-
-    public function getFutureDataForDate($startTime) {
-        $startTime = Price15::where('time', '<=', $startTime)->orderBy('time', 'desc')->first()->time;
-
-        $prices = Price::where('time', '>=', $startTime)->orderBy('time')->take(180)->get()->toArray();
-        $candles = array_map(function($p) {
-            return [$p['time'], $p['open'], $p['high'], $p['low'], $p['close']];
-        }, $prices);
-
-        $bbs = Bb::where('time', '>=', $startTime)->orderBy('time')->take(180)->get()->toArray();
-        $bbData = array_map(function($p) {
-            return [$p['time'], $p['sma'], $p['sd'], $p['upper'], $p['lower']];
-        }, $bbs);
-
-        $price5s = Price5::where('time', '>=', $startTime)->orderBy('time')->take(36)->get()->toArray();
-        $candle5s = array_map(function($p) {
-            return [$p['time'], $p['open'], $p['high'], $p['low'], $p['close']];
-        }, $price5s);
-
-        $bb5s  = Bb5::where('time', '>=', $startTime)->orderBy('time')->take(36)->get()->toArray();
-
-        $bb5Data = array_map(function($p) {
-            return [$p['time'], $p['sma'], $p['sd'], $p['upper'], $p['lower']];
-        }, $bb5s);
-
-        $price15s = Price15::where('time', '>=', $startTime)->orderBy('time')->take(12)->get()->toArray();
-        $candle15s = array_map(function($p) {
-            return [$p['time'], $p['open'], $p['high'], $p['low'], $p['close']];
-        }, $price15s);
-
-        $bb15s  = Bb15::where('time', '>=', $startTime)->orderBy('time')->take(12)->get()->toArray();
-
-        $bb15Data = array_map(function($p) {
-            return [$p['time'], $p['sma'], $p['sd'], $p['upper'], $p['lower']];
-        }, $bb15s);
+        $bbData = Bb::getPastData($startTime, $limit);
+        $bb5Data = Bb5::getPastData($startTime, $limit);
+        $bb15Data = Bb15::getPastData($startTime, $limit);
+        $bb60Data = Bb60::getPastData($startTime, $limit);
 
         return [
             'candles' => $candles,
@@ -124,6 +60,33 @@ class GraphController extends Controller
             'm5_bb_data' => $bb5Data,
             'm15_candles' => $candle15s,
             'm15_bb_data' => $bb15Data,
+            'm60_candles' => $candle60s,
+            'm60_bb_data' => $bb60Data,
+        ];
+    }
+
+    public function getFutureDataForDate($startTime) {
+        $startTime = Price60::where('time', '<=', $startTime)->orderBy('time', 'desc')->first()->time;
+
+        $candles = Price::getFutureData($startTime, 180);
+        $candle5s = Price5::getFutureData($startTime, 36);
+        $candle15s = Price15::getFutureData($startTime, 12);
+        $candle60s = Price60::getFutureData($startTime, 3);
+
+        $bbData = Bb::getFutureData($startTime, 180);
+        $bb5Data = Bb5::getFutureData($startTime, 36);
+        $bb15Data = Bb15::getFutureData($startTime, 12);
+        $bb60Data = Bb60::getFutureData($startTime, 3);
+
+        return [
+            'candles' => $candles,
+            'bb_data' => $bbData,
+            'm5_candles' => $candle5s,
+            'm5_bb_data' => $bb5Data,
+            'm15_candles' => $candle15s,
+            'm15_bb_data' => $bb15Data,
+            'm60_candles' => $candle60s,
+            'm60_bb_data' => $bb60Data,
         ];
     }
 }

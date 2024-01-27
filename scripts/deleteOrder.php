@@ -1,10 +1,34 @@
 <?php
 require "../auth.php";
 
-$orders = func_query("select o.orderid, o.date, o.login, r.route_name from dbp_orders o inner join dbp_routes r on o.route_id = r.route_id inner join dbp_route_vacations rv on rv.route_id = o.route_id and rv.start_date < o.date and rv.end_date > o.date where o.date > unix_timestamp()");
-
+$orders = [
+11857,
+11863,
+11865,
+11866,
+11867,
+11870,
+11872,
+11873,
+11874,
+11876,
+11877,
+11879,
+11881,
+11886,
+11889,
+11890,
+11892,
+11893,
+11896,
+11902,
+11905,
+11925
+];
 foreach ($orders as $o) {
-    echo $o['login'] . ',' . date('Y-m-d', $o['date']) . ',"' . $o['route_name'] . '"'  . PHP_EOL;
-    //$current_order = new \CurrentOrder($o['orderid']);
-    //$current_order->DeleteStorage();
+    echo $o . PHP_EOL;
+    $current_order = new \CurrentOrder($o);
+    $current_order->deleteProductByProductId(1655);
+    $current_order->calculate_and_save();
+    break;
 }

@@ -10,7 +10,7 @@ var currentPrice = 0;
 
 var next = function() {
 
-    var [shiftCount, lastCandle, lastBb, lastM5Candle, lastM5Bb, lastM15Candle, lastM15Bb] = shiftData();
+    var [shiftCount, lastCandle, lastBb, lastM5Candle, lastM5Bb, lastM15Candle, lastM15Bb, lastM60Candle, lastM60Bb] = shiftData();
 
     currentPrice = parseFloat(lastCandle.y[3]);
     $('#price').val(currentPrice);
@@ -44,13 +44,19 @@ var next = function() {
         } else {
             updateGraph(lastM5Candle);
         }
-    }
-    else if (mode === 'm15') {
+    } else if (mode === 'm15') {
         if (shiftCount % 150 === 0) {
             appendGraph(lastM15Candle);
             appendIndicator(lastM15Bb);
         } else {
             updateGraph(lastM15Candle);
+        }
+    } else if (mode === 'm60') {
+        if (shiftCount % 600 === 0) {
+            appendGraph(lastM60Candle);
+            appendIndicator(lastM60Bb);
+        } else {
+            updateGraph(lastM60Candle);
         }
     }
 
@@ -86,6 +92,11 @@ $(document).ready(function(){
     });
     $('#m15').click(function() {
         mode = 'm15';
+        var graphData = getGraphData();
+        changeGraphMode(graphData, mode);
+    });
+    $('#m60').click(function() {
+        mode = 'm60';
         var graphData = getGraphData();
         changeGraphMode(graphData, mode);
     });

@@ -56,6 +56,8 @@ export function loadGraphData() {
                 m5_bb_data: formatBbData(response.m5_bb_data),
                 m15_candles: formatCandlesData(response.m15_candles),
                 m15_bb_data: formatBbData(response.m15_bb_data),
+                m60_candles: formatCandlesData(response.m60_candles),
+                m60_bb_data: formatBbData(response.m60_bb_data),
             }
             resolve(graphData);
         });
@@ -72,6 +74,8 @@ export function loadFutureData() {
                 m5_bb_data: formatBbData(response.m5_bb_data),
                 m15_candles: formatCandlesData(response.m15_candles),
                 m15_bb_data: formatBbData(response.m15_bb_data),
+                m60_candles: formatCandlesData(response.m60_candles),
+                m60_bb_data: formatBbData(response.m60_bb_data),
             }
             resolve(futureData);
         });
@@ -112,6 +116,15 @@ export function shiftData() {
         };
     }
 
+    if (shiftCount % 600 == 0) {
+        currentData.m60_candles = futureData.m60_candles.shift();
+        currentData.m60_bb_data = {
+            sma: futureData.m60_bb_data.sma.shift(),
+            lower: futureData.m60_bb_data.lower.shift(),
+            upper: futureData.m60_bb_data.upper.shift()
+        };
+    }
+
 
     if (realTimeDatas.length === 0) {
         var nextCandle = currentData.m1_candles;
@@ -121,6 +134,7 @@ export function shiftData() {
     var realTimeData =  realTimeDatas.shift();
     var currentM5Candle;
     var currentM15Candle;
+    var currentM60Candle;
 
     if (shiftCount % 10 === 0) {
         graphData.m1_candles.push(realTimeData);
@@ -184,9 +198,35 @@ export function shiftData() {
         graphData.m15_candles[graphData.m15_candles.length - 1] = currentM15Candle;
     }
 
+    if (shiftCount % 600 === 0) {
+        currentM60Candle = {
+            x: realTimeData.x,
+            y: $.extend([], realTimeData.y)
+        }
+
+        graphData.m60_candles.push(currentM60Candle);
+        graphData.m60_bb_data.sma.push(currentData.m60_bb_data.sma);
+        graphData.m60_bb_data.upper.push(currentData.m60_bb_data.upper);
+        graphData.m60_bb_data.lower.push(currentData.m60_bb_data.lower);
+
+    } else {
+        currentM60Candle = graphData.m60_candles[graphData.m60_candles.length - 1];
+
+        currentM60Candle.y[3] = realTimeData.y[3];
+
+        if (currentM60Candle.y[1] < realTimeData.y[1]) {
+            currentM60Candle.y[1] = realTimeData.y[1];
+        }
+        if (currentM60Candle.y[2] > realTimeData.y[2]) {
+            currentM60Candle.y[2] = realTimeData.y[2];
+        }
+
+        graphData.m60_candles[graphData.m60_candles.length - 1] = currentM60Candle;
+    }
+
     shiftCount++;
 
-    return [shiftCount - 1, realTimeData, currentData.m1_bb_data, currentM5Candle, currentData.m5_bb_data, currentM15Candle, currentData.m15_bb_data];
+    return [shiftCount - 1, realTimeData, currentData.m1_bb_data, currentM5Candle, currentData.m5_bb_data, currentM15Candle, currentData.m15_bb_data, currentM60Candle, currentData.m60_bb_data];
 }
 
 

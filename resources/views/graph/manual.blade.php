@@ -47,6 +47,7 @@
                     <button type="button" class="btn btn-primary" id="m1">M1</button>
                     <button type="button" class="btn btn-primary" id="m5">M5</button>
                     <button type="button" class="btn btn-primary" id="m15">M15</button>
+                    <button type="button" class="btn btn-primary" id="m60">H1</button>
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="x1">X1</button>
